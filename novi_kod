@@ -1,0 +1,401 @@
+
+
+CREATE TABLE MJESTO(
+    mjestoID INT PRIMARY KEY,
+    naziv VARCHAR2(255) NOT NULL,
+    postanski_broj INT NOT NULL,
+    drzava VARCHAR2(50)
+);
+
+CREATE TABLE ORGANIZACIJA(
+    OIB INT PRIMARY KEY,
+    naziv VARCHAR2(255) NOT NULL,
+    adresa VARCHAR2(255) DEFAULT '-potrebno unijeti-',
+    kontakt_broj VARCHAR2(14),
+    web_stranica VARCHAR2(1024) DEFAULT '-potrebno unijeti-',
+    mjesto_ID INT,
+    zaposlenik_ID INT
+);
+
+CREATE TABLE PROIZVOD(
+    proizvodID INT PRIMARY KEY,
+    naziv VARCHAR2(255) NOT NULL,
+    cijena FLOAT,
+    opis VARCHAR2(1024),
+    organizacija_OIB INT
+);
+
+CREATE TABLE JE_U(
+    je_uID INT PRIMARY KEY,
+    kolicina INT DEFAULT 1 NOT NULL,
+    proizvod_ID INT,
+    narudzba_ID INT
+);
+
+CREATE TABLE NARUDZBA(
+    narudzbaID INT PRIMARY KEY,
+    datum_narudzbe DATE DEFAULT SYSDATE,
+    cijena_ukupno FLOAT,   
+    klijent_ID INT,
+    zaposlenik_ID INT,
+    pzp_ID INT
+);
+
+CREATE TABLE KLIJENT(
+    klijentID INT PRIMARY KEY,
+    broj_narudzbi INT,
+    suma_vrijednosti_narudzbi FLOAT DEFAULT 0,
+    vrijednost_klijenta NUMBER(2) DEFAULT 0,
+    osoba_ID INT
+);
+
+CREATE TABLE ZAPOSLENIK(
+    zaposlenikID INT PRIMARY KEY,
+    ime VARCHAR2(50) NOT NULL,
+    prezime VARCHAR2(50) NOT NULL,
+    broj_mobitela VARCHAR2(14),
+    uloga VARCHAR2(50) DEFAULT '-potrebno unijeti-',
+    odjel VARCHAR2(50) DEFAULT '-potrebno unijeti-',
+    datum_zaposlenja DATE DEFAULT SYSDATE,
+    koeficijent NUMBER(4,2)
+);
+
+CREATE TABLE POTENCIJALNI_KLIJENT(
+    pkID INT PRIMARY KEY,
+    datum_kontakta DATE DEFAULT SYSDATE,
+    vjerojatnost_napretka VARCHAR2(50) DEFAULT '0%',
+    zaposlenik_ID INT,
+    osoba_ID INT
+);
+
+CREATE TABLE PRILIKA_ZA_PRODAJU(
+    pzpID INT PRIMARY KEY,
+    opis VARCHAR2(1024) DEFAULT '-potrebno unijeti-',
+    potencijalni_prihod FLOAT DEFAULT 0,
+    datum_identifikacije DATE DEFAULT SYSDATE,
+    status VARCHAR2(50) DEFAULT '-potrebno unijeti-',
+    pk_ID INT,
+    osoba_ID INT
+);
+
+CREATE TABLE KORISNICKI_UPIT(
+	upitID INT PRIMARY KEY,
+	datum_zaprimanja DATE DEFAULT SYSDATE,
+	datum_zakljucenja DATE DEFAULT SYSDATE,
+	opis VARCHAR2(1024) DEFAULT '-potrebno unijeti-',
+	status VARCHAR2(50) DEFAULT '-nije zakljuceno-',
+	zaposlenik_ID INT,	
+	klijent_ID INT
+);
+
+
+CREATE TABLE MARKETINSKA_KAMPANJA(
+    kampanjaID INT PRIMARY KEY,
+    naziv VARCHAR2(255) DEFAULT '-potrebno unijeti-',
+    opis VARCHAR2(1024) DEFAULT '-potrebno unijeti-',
+    datum_pocetka DATE DEFAULT SYSDATE,
+    datum_zavrsetka DATE DEFAULT SYSDATE,
+    budzet FLOAT,
+    organizacija_ID INT
+);
+
+
+
+CREATE TABLE UPRAVLJA(
+	upravljaID INT PRIMARY KEY,
+	zaposlenik_ID INT,
+	kampanja_ID INT
+);
+
+CREATE TABLE CILJA(
+	ciljaID INT PRIMARY KEY,
+	kampanja_ID INT,
+	osoba_ID INT
+);
+
+
+CREATE TABLE OSOBA(
+	OIB INT PRIMARY KEY,
+	ime VARCHAR(50),
+	prezime VARCHAR(50),
+	broj_mobitela VARCHAR2(14),
+	email VARCHAR2(255),
+	adresa VARCHAR2(255),
+	datum_rodenja DATE DEFAULT SYSDATE,
+	spol CHAR(1),
+    mjesto_ID INT
+);
+
+
+CREATE TABLE KONTAKTI(
+    id INT PRIMARY KEY,
+    ime varchar(50),
+    prezime varchar(50),
+    email varchar2(255),
+    broj_mobitela VARCHAR2(14),
+    organizacija_ID INT
+);
+
+
+ALTER TABLE ORGANIZACIJA
+ADD(CONSTRAINT fk_mjesto FOREIGN KEY (mjesto_ID) REFERENCES MJESTO(mjestoID),
+    CONSTRAINT fk_zap_org FOREIGN KEY (zaposlenik_ID) REFERENCES zaposlenik(zaposlenikID));
+
+
+ALTER TABLE PROIZVOD
+ADD(CONSTRAINT fk_organizacija FOREIGN KEY (organizacija_OIB) REFERENCES ORGANIZACIJA(OIB));
+
+
+ALTER TABLE JE_U
+ADD(CONSTRAINT fk_proizvod FOREIGN KEY (proizvod_ID) REFERENCES PROIZVOD(proizvodID),
+    CONSTRAINT fk_narudzba FOREIGN KEY (narudzba_ID) REFERENCES NARUDZBA(narudzbaID));
+
+
+ALTER TABLE NARUDZBA
+ADD(CONSTRAINT fk_klijent FOREIGN KEY (klijent_ID) REFERENCES KLIJENT(klijentID),
+    CONSTRAINT fk_pk FOREIGN KEY (pzp_ID) REFERENCES PRILIKA_ZA_PRODAJU(pzpID),
+    CONSTRAINT fk_zaposlenik FOREIGN KEY (zaposlenik_ID) REFERENCES ZAPOSLENIK(zaposlenikID));
+
+
+ALTER TABLE KLIJENT
+ADD(CONSTRAINT fk_osoba FOREIGN KEY (osoba_ID) REFERENCES OSOBA(OIB));
+
+
+
+
+ALTER TABLE POTENCIJALNI_KLIJENT
+ADD(CONSTRAINT fk_zaposlenik_pk FOREIGN KEY (zaposlenik_ID) REFERENCES ZAPOSLENIK(zaposlenikID),
+    CONSTRAINT fk_osoba_pk FOREIGN KEY (osoba_ID) REFERENCES OSOBA(OIB));
+
+
+ALTER TABLE PRILIKA_ZA_PRODAJU
+ADD(CONSTRAINT fk_pk_pzp FOREIGN KEY (pk_ID) REFERENCES POTENCIJALNI_KLIJENT(pkID),
+    CONSTRAINT fk_osoba_pzp FOREIGN KEY (osoba_ID) REFERENCES OSOBA(OIB));
+
+
+ALTER TABLE KORISNICKI_UPIT
+ADD(CONSTRAINT fk_zaposlenik_ku FOREIGN KEY (zaposlenik_ID) REFERENCES ZAPOSLENIK(zaposlenikID),
+    CONSTRAINT fk_klijent_ku FOREIGN KEY (klijent_ID) REFERENCES KLIJENT(klijentID));
+
+
+ALTER TABLE MARKETINSKA_KAMPANJA
+ADD(CONSTRAINT fk_organizacija_mk FOREIGN KEY (organizacija_ID) REFERENCES ORGANIZACIJA(OIB));
+
+
+ALTER TABLE UPRAVLJA
+ADD(CONSTRAINT fk_zaposlenik_upravlja FOREIGN KEY (zaposlenik_ID) REFERENCES ZAPOSLENIK(zaposlenikID),
+    CONSTRAINT fk_kampanja_upravlja FOREIGN KEY (kampanja_ID) REFERENCES MARKETINSKA_KAMPANJA(kampanjaID));
+
+
+ALTER TABLE CILJA
+ADD(CONSTRAINT fk_kampanja_cilja FOREIGN KEY (kampanja_ID) REFERENCES MARKETINSKA_KAMPANJA(kampanjaID),
+    CONSTRAINT fk_osoba_cilja FOREIGN KEY (osoba_ID) REFERENCES OSOBA(OIB));
+
+
+ALTER TABLE OSOBA
+ADD(CONSTRAINT fk_osoba_preb FOREIGN KEY (mjesto_ID) REFERENCES MJESTO(mjestoID));
+
+ALTER TABLE KONTAKTI
+ADD(CONSTRAINT fk_kontakt FOREIGN KEY (organizacija_ID) REFERENCES organizacija(OIB));
+
+
+INSERT INTO MJESTO (mjestoID, naziv, postanski_broj, drzava) 
+VALUES (1, 'Zagreb', 10000, 'Hrvatska');
+INSERT INTO MJESTO (mjestoID, naziv, postanski_broj, drzava)
+VALUES (2, 'Split', 21000, 'Hrvatska');
+INSERT INTO MJESTO (mjestoID, naziv, postanski_broj, drzava)
+VALUES(3, 'Rijeka', 51000, 'Hrvatska');
+INSERT INTO MJESTO (mjestoID, naziv, postanski_broj, drzava)
+VALUES(4, 'Osijek', 31000, 'Hrvatska');
+INSERT INTO MJESTO (mjestoID, naziv, postanski_broj, drzava)
+VALUES(5, 'Zadar', 23000, 'Hrvatska');
+
+INSERT INTO ZAPOSLENIK (zaposlenikID, ime, prezime, broj_mobitela, uloga, odjel, datum_zaposlenja, koeficijent)  
+VALUES(1, 'Krešimir', 'Vrdoljak', '385911234567', 'Menađer', 'Prodaja', TO_DATE('2020-01-01', 'YYYY-MM-DD'), 3.7);
+
+
+INSERT INTO ORGANIZACIJA (OIB, naziv, adresa, kontakt_broj, web_stranica, mjesto_ID,zaposlenik_ID) VALUES 
+(19061092236, 'Tech Solutions Ltd.', 'Ilica 242', '38512345678', 'www.techsolutions.hr', 1,1);
+INSERT INTO ORGANIZACIJA (OIB, naziv, adresa, kontakt_broj, web_stranica, mjesto_ID,zaposlenik_ID) VALUES 
+(64041933402, 'Maritime Co.', 'Riva 6', '38521345678', 'www.maritimeco.hr', 2,1);
+INSERT INTO ORGANIZACIJA (OIB, naziv, adresa, kontakt_broj, web_stranica, mjesto_ID,zaposlenik_ID) VALUES 
+(11549541586, 'Foodies Inc.', 'Korzo 1', '38551345678', 'www.foodiesinc.hr', 3,1);
+INSERT INTO ORGANIZACIJA (OIB, naziv, adresa, kontakt_broj, web_stranica, mjesto_ID,zaposlenik_ID) VALUES 
+(08252352788, 'Agro Products', 'Vukovarska 12', '38531345678', 'www.agroproducts.hr', 4,1);
+INSERT INTO ORGANIZACIJA (OIB, naziv, adresa, kontakt_broj, web_stranica, mjesto_ID,zaposlenik_ID) VALUES 
+(89585474543, 'Travel Adventures', 'Obala kralja Tomislava 3', '38523345678', 'www.traveladventures.hr', 5,1);
+
+
+
+
+
+
+
+INSERT INTO PROIZVOD (proizvodID, naziv, cijena, opis, organizacija_OIB) VALUES 
+(1, 'Laptop', 7500.00, 'High-end gaming laptop', 19061092236);
+INSERT INTO PROIZVOD (proizvodID, naziv, cijena, opis, organizacija_OIB) VALUES 
+(2, 'Gliser', 120000.00, 'Luksuzni gliser 7 metara', 64041933402);
+INSERT INTO PROIZVOD (proizvodID, naziv, cijena, opis, organizacija_OIB) VALUES 
+(3, 'Pizza', 60.00, 'Jumbo pizza', 11549541586);
+INSERT INTO PROIZVOD (proizvodID, naziv, cijena, opis, organizacija_OIB) VALUES 
+(4, 'Traktor', 450000.00, 'John Deere, Model:6120M, 120HP', 08252352788);
+INSERT INTO PROIZVOD (proizvodID, naziv, cijena, opis, organizacija_OIB) VALUES 
+(5, 'Putni paket', 5000.00, '7-dnevni all-inclusive putni paket', 89585474543);
+
+
+
+
+
+INSERT INTO OSOBA (OIB, ime, prezime, broj_mobitela, email, adresa, datum_rodenja, spol,mjesto_id)  
+VALUES(94460055154, 'Tomislav', 'Mikuli?', '+385981234567', 'tomislav.mikulic@gmail.com', 'Vukovarska 33', TO_DATE('1985-05-20', 'YYYY-MM-DD'), 'M',1);
+INSERT INTO OSOBA (OIB, ime, prezime, broj_mobitela, email, adresa, datum_rodenja, spol,mjesto_id) 
+VALUES(87400005666, 'Ivana', 'Grgi?', '+385981234568', 'ivana.grgic@gmail.com', 'Gunduli?eva 45', TO_DATE('1990-06-15', 'YYYY-MM-DD'), 'F',1);
+INSERT INTO OSOBA (OIB, ime, prezime, broj_mobitela, email, adresa, datum_rodenja, spol,mjesto_id) 
+VALUES(99303444138, 'Krešimir', 'Juri?', '+385981234569', 'kresimir.juric@gmail.com', 'Savska 22', TO_DATE('1982-03-10', 'YYYY-MM-DD'), 'M',1);
+INSERT INTO OSOBA (OIB, ime, prezime, broj_mobitela, email, adresa, datum_rodenja, spol,mjesto_id) 
+VALUES(28542173888, 'Marina', 'Kneževi?', '+385981234570', 'marina.knezevic@gmail.com', 'Draškovi?eva 19', TO_DATE('1987-07-25', 'YYYY-MM-DD'), 'F',1);
+INSERT INTO OSOBA (OIB, ime, prezime, broj_mobitela, email, adresa, datum_rodenja, spol,mjesto_id) 
+VALUES(20035496339, 'Darko', 'Babi?', '+385981234571', 'darko.babic@gmail.com', 'Heinzelova 5', TO_DATE('1978-02-15', 'YYYY-MM-DD'), 'M',1);
+
+
+
+
+
+
+
+
+INSERT INTO KLIJENT (klijentID, broj_narudzbi, suma_vrijednosti_narudzbi, vrijednost_klijenta, osoba_ID)  
+VALUES(1, 1, 15000.00, 5, 94460055154);
+INSERT INTO KLIJENT (klijentID, broj_narudzbi, suma_vrijednosti_narudzbi, vrijednost_klijenta, osoba_ID)
+VALUES(2, 1, 120000.00, 10, 87400005666);
+INSERT INTO KLIJENT (klijentID, broj_narudzbi, suma_vrijednosti_narudzbi, vrijednost_klijenta, osoba_ID)
+VALUES(3, 1, 300.00, 3, 99303444138);
+INSERT INTO KLIJENT (klijentID, broj_narudzbi, suma_vrijednosti_narudzbi, vrijednost_klijenta, osoba_ID)
+VALUES(4, 1, 450000.00, 10, 28542173888);
+INSERT INTO KLIJENT (klijentID, broj_narudzbi, suma_vrijednosti_narudzbi, vrijednost_klijenta, osoba_ID)
+VALUES(5, 1, 15000.00, 5, 20035496339);
+
+
+
+INSERT INTO POTENCIJALNI_KLIJENT (pkID, datum_kontakta, vjerojatnost_napretka, zaposlenik_ID, osoba_ID)  
+VALUES(1, TO_DATE('2024-05-01', 'YYYY-MM-DD'), '50%', 1, 94460055154);
+INSERT INTO POTENCIJALNI_KLIJENT (pkID, datum_kontakta, vjerojatnost_napretka, zaposlenik_ID, osoba_ID)
+VALUES(2, TO_DATE('2024-05-02', 'YYYY-MM-DD'), '70%', 1, 87400005666);
+INSERT INTO POTENCIJALNI_KLIJENT (pkID, datum_kontakta, vjerojatnost_napretka, zaposlenik_ID, osoba_ID)
+VALUES(3, TO_DATE('2024-05-03', 'YYYY-MM-DD'), '30%', 1, 99303444138);
+INSERT INTO POTENCIJALNI_KLIJENT (pkID, datum_kontakta, vjerojatnost_napretka, zaposlenik_ID, osoba_ID)
+VALUES(4, TO_DATE('2024-05-04', 'YYYY-MM-DD'), '90%', 1, 28542173888);
+INSERT INTO POTENCIJALNI_KLIJENT (pkID, datum_kontakta, vjerojatnost_napretka, zaposlenik_ID, osoba_ID)
+VALUES(5, TO_DATE('2024-05-05', 'YYYY-MM-DD'), '60%', 1, 20035496339);
+
+
+
+INSERT INTO PRILIKA_ZA_PRODAJU (pzpID, opis, potencijalni_prihod, datum_identifikacije, status, pk_ID, osoba_ID)  
+VALUES(1, 'High-value client', 20000.00, TO_DATE('2024-05-15', 'YYYY-MM-DD'), 'U tijeku', 1, 94460055154);
+INSERT INTO PRILIKA_ZA_PRODAJU (pzpID, opis, potencijalni_prihod, datum_identifikacije, status, pk_ID, osoba_ID) 
+VALUES(2, 'Medium-value client', 15000.00, TO_DATE('2024-05-16', 'YYYY-MM-DD'), 'Zaključena', 2, 87400005666);
+INSERT INTO PRILIKA_ZA_PRODAJU (pzpID, opis, potencijalni_prihod, datum_identifikacije, status, pk_ID, osoba_ID) 
+VALUES(3, 'Low-value client', 5000.00, TO_DATE('2024-05-17', 'YYYY-MM-DD'), 'U tijeku', 3, 99303444138);
+INSERT INTO PRILIKA_ZA_PRODAJU (pzpID, opis, potencijalni_prihod, datum_identifikacije, status, pk_ID, osoba_ID) 
+VALUES(4, 'High-value client', 30000.00, TO_DATE('2024-05-18', 'YYYY-MM-DD'), 'Zaključena', 4, 28542173888);
+INSERT INTO PRILIKA_ZA_PRODAJU (pzpID, opis, potencijalni_prihod, datum_identifikacije, status, pk_ID, osoba_ID) 
+VALUES(5, 'Medium-value client', 10000.00, TO_DATE('2024-05-19', 'YYYY-MM-DD'), 'Zaključena', 5, 20035496339);
+
+
+
+
+INSERT INTO NARUDZBA (narudzbaID, datum_narudzbe, cijena_ukupno, klijent_ID, zaposlenik_ID, pzp_ID) 
+VALUES (1, TO_DATE('2024-06-01', 'YYYY-MM-DD'), 15000.00, 1, 1, 1);
+INSERT INTO NARUDZBA (narudzbaID, datum_narudzbe, cijena_ukupno, klijent_ID, zaposlenik_ID, pzp_ID)
+VALUES(2, TO_DATE('2024-06-02', 'YYYY-MM-DD'), 120000.00, 2, 1, 2);
+INSERT INTO NARUDZBA (narudzbaID, datum_narudzbe, cijena_ukupno, klijent_ID, zaposlenik_ID, pzp_ID)
+VALUES(3, TO_DATE('2024-06-03', 'YYYY-MM-DD'), 300.00, 3, 1, 3);
+INSERT INTO NARUDZBA (narudzbaID, datum_narudzbe, cijena_ukupno, klijent_ID, zaposlenik_ID, pzp_ID)
+VALUES(4, TO_DATE('2024-06-04', 'YYYY-MM-DD'), 450000.00, 4, 1, 4);
+INSERT INTO NARUDZBA (narudzbaID, datum_narudzbe, cijena_ukupno, klijent_ID, zaposlenik_ID, pzp_ID)
+VALUES(5, TO_DATE('2024-06-05', 'YYYY-MM-DD'), 15000.00, 5, 1, 5);
+
+
+
+
+INSERT INTO JE_U (je_uID, kolicina, proizvod_ID, narudzba_ID) 
+VALUES (1, 2, 1, 1);
+INSERT INTO JE_U (je_uID, kolicina, proizvod_ID, narudzba_ID) 
+VALUES(2, 1, 2, 2);
+INSERT INTO JE_U (je_uID, kolicina, proizvod_ID, narudzba_ID) 
+VALUES(3, 5, 3, 3);
+INSERT INTO JE_U (je_uID, kolicina, proizvod_ID, narudzba_ID)
+VALUES(4, 1, 4, 4);
+INSERT INTO JE_U (je_uID, kolicina, proizvod_ID, narudzba_ID)
+VALUES(5, 3, 5, 5);
+
+
+
+INSERT INTO KORISNICKI_UPIT (upitID, datum_zaprimanja, datum_zakljucenja, opis, status, zaposlenik_ID, klijent_ID)  
+VALUES(1, TO_DATE('2024-06-01', 'YYYY-MM-DD'), TO_DATE('2024-06-02', 'YYYY-MM-DD'), 'Problem s dostavom', 'Zatvoreno', 1, 1);
+INSERT INTO KORISNICKI_UPIT (upitID, datum_zaprimanja, datum_zakljucenja, opis, status, zaposlenik_ID, klijent_ID)
+VALUES(2, TO_DATE('2024-06-03', 'YYYY-MM-DD'), TO_DATE('2024-06-04', 'YYYY-MM-DD'), 'Upit o garanciji', 'Zatvoreno', 1, 2);
+INSERT INTO KORISNICKI_UPIT (upitID, datum_zaprimanja, datum_zakljucenja, opis, status, zaposlenik_ID, klijent_ID)
+VALUES(3, TO_DATE('2024-06-05', 'YYYY-MM-DD'), TO_DATE('2024-06-06', 'YYYY-MM-DD'), 'Problem s naplatom', 'U tijeku', 1, 3);
+INSERT INTO KORISNICKI_UPIT (upitID, datum_zaprimanja, datum_zakljucenja, opis, status, zaposlenik_ID, klijent_ID)
+VALUES(4, TO_DATE('2024-06-07', 'YYYY-MM-DD'), TO_DATE('2024-06-08', 'YYYY-MM-DD'), 'Potrebna tehnička podrška', 'U tijeku', 1, 4);
+INSERT INTO KORISNICKI_UPIT (upitID, datum_zaprimanja, datum_zakljucenja, opis, status, zaposlenik_ID, klijent_ID)
+VALUES(5, TO_DATE('2024-06-09', 'YYYY-MM-DD'), TO_DATE('2024-06-10', 'YYYY-MM-DD'), 'Povratne informacije o proizvodu', 'Zatvoreno', 1, 5);
+
+
+
+
+
+
+INSERT INTO MARKETINSKA_KAMPANJA (kampanjaID, naziv, opis, datum_pocetka, datum_zavrsetka, budzet, organizacija_ID)  
+VALUES(1, 'Crni petak', 'Popust 15% na sve artikle iz kategorije prijenosna računala', TO_DATE('2024-06-01', 'YYYY-MM-DD'), TO_DATE('2024-06-30', 'YYYY-MM-DD'), 50000.00, 19061092236);
+INSERT INTO MARKETINSKA_KAMPANJA (kampanjaID, naziv, opis, datum_pocetka, datum_zavrsetka, budzet, organizacija_ID)
+VALUES(2, 'Upoznajte novu liniju', 'Predstavljamo Vam novu liniju luksuznih glisera', TO_DATE('2024-07-01', 'YYYY-MM-DD'), TO_DATE('2024-07-31', 'YYYY-MM-DD'), 75000.00, 64041933402);
+INSERT INTO MARKETINSKA_KAMPANJA (kampanjaID, naziv, opis, datum_pocetka, datum_zavrsetka, budzet, organizacija_ID)
+VALUES(3, 'Tropski okusi', 'Okus kakav se ne zaboravlja, isprobajte pizzu s ananasom', TO_DATE('2024-12-01', 'YYYY-MM-DD'), TO_DATE('2024-12-31', 'YYYY-MM-DD'), 60000.00, 11549541586);
+INSERT INTO MARKETINSKA_KAMPANJA (kampanjaID, naziv, opis, datum_pocetka, datum_zavrsetka, budzet, organizacija_ID)
+VALUES(4, 'Jesenska žetva', 'Gdje se poljoprivreda susreće s izvrsnošču', TO_DATE('2024-03-01', 'YYYY-MM-DD'), TO_DATE('2024-03-31', 'YYYY-MM-DD'), 45000.00, 08252352788);
+INSERT INTO MARKETINSKA_KAMPANJA (kampanjaID, naziv, opis, datum_pocetka, datum_zavrsetka, budzet, organizacija_ID)
+VALUES(5, 'Summer season', 'Pođite s nama na nezaboravne avanture', TO_DATE('2024-11-01', 'YYYY-MM-DD'), TO_DATE('2024-11-30', 'YYYY-MM-DD'), 100000.00, 89585474543);
+
+
+INSERT INTO KONTAKTI(id,ime,prezime,broj_mobitela,organizacija_id)
+VALUES(1,'Ante','Antić',385919361964,19061092236);
+INSERT INTO KONTAKTI(id,ime,prezime,broj_mobitela,organizacija_id)
+VALUES(2,'Marko','Matić',385914321678,64041933402);
+INSERT INTO KONTAKTI(id,ime,prezime,broj_mobitela,organizacija_id)
+VALUES(3,'Ivo','Ivić',385917834007,11549541586);
+INSERT INTO KONTAKTI(id,ime,prezime,broj_mobitela,organizacija_id)
+VALUES(4,'Mateo','Antunović',385910987654,08252352788);
+INSERT INTO KONTAKTI(id,ime,prezime,broj_mobitela,organizacija_id)
+VALUES(5,'Josip','Šimić',385914598103,89585474543);
+
+
+
+INSERT INTO UPRAVLJA (upravljaID, zaposlenik_ID, kampanja_ID)  
+VALUES(1, 1, 1);
+INSERT INTO UPRAVLJA (upravljaID, zaposlenik_ID, kampanja_ID)
+VALUES(2, 1, 2);
+INSERT INTO UPRAVLJA (upravljaID, zaposlenik_ID, kampanja_ID)
+VALUES(3, 1, 3);
+INSERT INTO UPRAVLJA (upravljaID, zaposlenik_ID, kampanja_ID)
+VALUES(4, 1, 4);
+INSERT INTO UPRAVLJA (upravljaID, zaposlenik_ID, kampanja_ID)
+VALUES(5, 1, 5);
+
+
+
+INSERT INTO CILJA (ciljaID, kampanja_ID, osoba_ID)  
+VALUES(1, 1, 94460055154);
+INSERT INTO CILJA (ciljaID, kampanja_ID, osoba_ID)
+VALUES(2, 2, 87400005666);
+INSERT INTO CILJA (ciljaID, kampanja_ID, osoba_ID)
+VALUES(3, 3, 99303444138);
+INSERT INTO CILJA (ciljaID, kampanja_ID, osoba_ID)
+VALUES(4, 4, 28542173888);
+INSERT INTO CILJA (ciljaID, kampanja_ID, osoba_ID)
+VALUES(5, 5, 20035496339);
+
+
+    
+
