@@ -231,13 +231,13 @@ INSERT INTO PROIZVOD (proizvodID, naziv, cijena, opis, organizacija_OIB) VALUES
 INSERT INTO ZAPOSLENIK (zaposlenikID, ime, prezime, broj_mobitela, uloga, odjel, datum_zaposlenja, koeficijent, organizacija_ID)  
 VALUES(1, 'Ivan', 'Horvat', '385911234567', 'Menader', 'Prodaja', TO_DATE('2020-01-01', 'YYYY-MM-DD'), 3.7, 11549541586);
 INSERT INTO ZAPOSLENIK (zaposlenikID, ime, prezime, broj_mobitela, uloga, odjel, datum_zaposlenja, koeficijent, organizacija_ID)
-VALUES(2, 'Ana', 'Marić', '385921234567', 'Specijalist za korisnicku podrsku', 'Prodaja', TO_DATE('2021-01-01', 'YYYY-MM-DD'), 1.8, 11549541586);
+VALUES(2, 'Ana', 'Marić', '385921234567', 'Prodajni savjetnik', 'Prodaja', TO_DATE('2021-01-01', 'YYYY-MM-DD'), 1.8, 11549541586);
 INSERT INTO ZAPOSLENIK (zaposlenikID, ime, prezime, broj_mobitela, uloga, odjel, datum_zaposlenja, koeficijent, organizacija_ID)
-VALUES(3, 'Marko', 'Novak', '385931234567', 'Specijalist za korisnicku podrsku', 'Podrska', TO_DATE('2019-01-01', 'YYYY-MM-DD'), 1.8, 11549541586);
+VALUES(3, 'Marko', 'Novak', '385931234567', 'Prodajni savjetnik', 'Prodaja', TO_DATE('2019-01-01', 'YYYY-MM-DD'), 1.8, 11549541586);
 INSERT INTO ZAPOSLENIK (zaposlenikID, ime, prezime, broj_mobitela, uloga, odjel, datum_zaposlenja, koeficijent, organizacija_ID)
-VALUES(4, 'Petra', 'Kovač', '385941234567', 'Tehnicar', 'Odrzavanje', TO_DATE('2018-01-01', 'YYYY-MM-DD'), 2.1, 11549541586);
+VALUES(4, 'Petra', 'Kovač', '385941234567', 'Prodajni savjetnik', 'Prodaja', TO_DATE('2018-01-01', 'YYYY-MM-DD'), 2.1, 11549541586);
 INSERT INTO ZAPOSLENIK (zaposlenikID, ime, prezime, broj_mobitela, uloga, odjel, datum_zaposlenja, koeficijent, organizacija_ID)
-VALUES(5, 'Luka', 'Barišić', '385951234567', 'Prodajni savjetnik', 'Savjetovanje', TO_DATE('2022-01-01', 'YYYY-MM-DD'), 2.5, 11549541586);
+VALUES(5, 'Luka', 'Barišić', '385951234567', 'Prodajni savjetnik', 'Prodaja', TO_DATE('2022-01-01', 'YYYY-MM-DD'), 2.5, 11549541586);
 
 
 
