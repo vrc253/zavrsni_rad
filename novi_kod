@@ -215,15 +215,15 @@ VALUES(1, 'Krešimir', 'Vrdoljak', '385911234567', 'Menađer', 'Prodaja', TO_DAT
 
 
 INSERT INTO ORGANIZACIJA (OIB, naziv, adresa, kontakt_broj, web_stranica, mjesto_ID,zaposlenik_ID) VALUES 
-(19061092236, 'Tech Solutions Ltd.', 'Ilica 242', '38512345678', 'www.techsolutions.hr', 1,1);
+(19061092236, 'Tech Solutions Ltd.', 'Ilica 242', '385912345678', 'www.techsolutions.hr', 1,1);
 INSERT INTO ORGANIZACIJA (OIB, naziv, adresa, kontakt_broj, web_stranica, mjesto_ID,zaposlenik_ID) VALUES 
-(64041933402, 'Maritime Co.', 'Riva 6', '38521345678', 'www.maritimeco.hr', 2,1);
+(64041933402, 'Maritime Co.', 'Riva 6', '385913456783', 'www.maritimeco.hr', 2,1);
 INSERT INTO ORGANIZACIJA (OIB, naziv, adresa, kontakt_broj, web_stranica, mjesto_ID,zaposlenik_ID) VALUES 
-(11549541586, 'Foodies Inc.', 'Korzo 1', '38551345678', 'www.foodiesinc.hr', 3,1);
+(11549541586, 'Foodies Inc.', 'Korzo 1', '385989361964', 'www.foodiesinc.hr', 3,1);
 INSERT INTO ORGANIZACIJA (OIB, naziv, adresa, kontakt_broj, web_stranica, mjesto_ID,zaposlenik_ID) VALUES 
-(08252352788, 'Agro Products', 'Vukovarska 12', '38531345678', 'www.agroproducts.hr', 4,1);
+(08252352788, 'Agro Products', 'Vukovarska 12', '385990022389', 'www.agroproducts.hr', 4,1);
 INSERT INTO ORGANIZACIJA (OIB, naziv, adresa, kontakt_broj, web_stranica, mjesto_ID,zaposlenik_ID) VALUES 
-(89585474543, 'Travel Adventures', 'Obala kralja Tomislava 3', '38523345678', 'www.traveladventures.hr', 5,1);
+(89585474543, 'Travel Adventures','385910983788'Obala kralja Tomislava 3', '38523345678', 'www.traveladventures.hr', 5,1);
 
 
 
