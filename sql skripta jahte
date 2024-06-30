@@ -248,11 +248,11 @@ VALUES(5, 'Luka', 'Barišić', '385951234567', 'Prodajni savjetnik', 'Prodaja', 
 INSERT INTO OSOBA (OIB, ime, prezime, broj_mobitela, email, adresa, datum_rodenja, spol,mjesto_id)  
 VALUES(94460055154, 'Tomislav', 'Mikulić', '+385981234567', 'tomislav.mikulic@gmail.com', 'Vukovarska 33', TO_DATE('1985-05-20', 'YYYY-MM-DD'), 'M',1);
 INSERT INTO OSOBA (OIB, ime, prezime, broj_mobitela, email, adresa, datum_rodenja, spol,mjesto_id) 
-VALUES(87400005666, 'Ivana', 'Grgić', '+385981234568', 'ivana.grgic@gmail.com', 'Gunduli?eva 45', TO_DATE('1990-06-15', 'YYYY-MM-DD'), 'F',1);
+VALUES(87400005666, 'Ivana', 'Grgić', '+385981234568', 'ivana.grgic@gmail.com', 'Gundulićeva 45', TO_DATE('1990-06-15', 'YYYY-MM-DD'), 'F',1);
 INSERT INTO OSOBA (OIB, ime, prezime, broj_mobitela, email, adresa, datum_rodenja, spol,mjesto_id) 
 VALUES(99303444138, 'Krešimir', 'Jurić', '+385981234569', 'kresimir.juric@gmail.com', 'Savska 22', TO_DATE('1982-03-10', 'YYYY-MM-DD'), 'M',1);
 INSERT INTO OSOBA (OIB, ime, prezime, broj_mobitela, email, adresa, datum_rodenja, spol,mjesto_id) 
-VALUES(28542173888, 'Marina', 'Knežević', '+385981234570', 'marina.knezevic@gmail.com', 'Draškovi?eva 19', TO_DATE('1987-07-25', 'YYYY-MM-DD'), 'F',1);
+VALUES(28542173888, 'Marina', 'Knežević', '+385981234570', 'marina.knezevic@gmail.com', 'Draškovićeva 19', TO_DATE('1987-07-25', 'YYYY-MM-DD'), 'F',1);
 INSERT INTO OSOBA (OIB, ime, prezime, broj_mobitela, email, adresa, datum_rodenja, spol,mjesto_id) 
 VALUES(20035496339, 'Darko', 'Babić', '+385981234571', 'darko.babic@gmail.com', 'Heinzelova 5', TO_DATE('1978-02-15', 'YYYY-MM-DD'), 'M',1);
 
@@ -308,13 +308,13 @@ VALUES(5, TO_DATE('2024-05-05', 'YYYY-MM-DD'), '60%', 5, 20035496339);
 INSERT INTO PRILIKA_ZA_PRODAJU (pzpID, opis, potencijalni_prihod, datum_identifikacije, status, pk_ID, osoba_ID)  
 VALUES(1, 'High-value client', 20000.00, TO_DATE('2024-05-15', 'YYYY-MM-DD'), 'U tijeku', 1, 94460055154);
 INSERT INTO PRILIKA_ZA_PRODAJU (pzpID, opis, potencijalni_prihod, datum_identifikacije, status, pk_ID, osoba_ID) 
-VALUES(2, 'Medium-value client', 15000.00, TO_DATE('2024-05-16', 'YYYY-MM-DD'), 'Zaklju?ena', 2, 87400005666);
+VALUES(2, 'Medium-value client', 15000.00, TO_DATE('2024-05-16', 'YYYY-MM-DD'), 'Zaključena', 2, 87400005666);
 INSERT INTO PRILIKA_ZA_PRODAJU (pzpID, opis, potencijalni_prihod, datum_identifikacije, status, pk_ID, osoba_ID) 
 VALUES(3, 'Low-value client', 5000.00, TO_DATE('2024-05-17', 'YYYY-MM-DD'), 'U tijeku', 3, 99303444138);
 INSERT INTO PRILIKA_ZA_PRODAJU (pzpID, opis, potencijalni_prihod, datum_identifikacije, status, pk_ID, osoba_ID) 
-VALUES(4, 'High-value client', 30000.00, TO_DATE('2024-05-18', 'YYYY-MM-DD'), 'Zaklju?ena', 4, 28542173888);
+VALUES(4, 'High-value client', 30000.00, TO_DATE('2024-05-18', 'YYYY-MM-DD'), 'Zaključena', 4, 28542173888);
 INSERT INTO PRILIKA_ZA_PRODAJU (pzpID, opis, potencijalni_prihod, datum_identifikacije, status, pk_ID, osoba_ID) 
-VALUES(5, 'Medium-value client', 10000.00, TO_DATE('2024-05-19', 'YYYY-MM-DD'), 'Zaklju?ena', 5, 20035496339);
+VALUES(5, 'Medium-value client', 10000.00, TO_DATE('2024-05-19', 'YYYY-MM-DD'), 'Zaključena', 5, 20035496339);
 
 
 
